@@ -34,8 +34,17 @@ def get_newsletter_data(full_url):
     return all_text
 
 
-the_index = get_index_data()
-print(json.dumps(the_index, indent=4))
-print()
-a_page = get_newsletter_data(the_index[0]["path"])
-print(a_page)
+with open("index.json", "w") as f:
+    json.dump(get_index_data(), f, indent=4)
+
+with open("index.json", "r") as f:
+    the_index = json.load(f)
+
+with open("newsletters.json", "w") as f:
+    all_nl = []
+    for newsletter in the_index:
+        the_nl = get_newsletter_data(newsletter["path"])
+        the_nl = "\n".join(the_nl)
+        all_nl.append(the_nl)
+        
+    json.dump(all_nl, f, indent=4)
